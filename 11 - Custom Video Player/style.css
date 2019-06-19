@@ -160,3 +160,7 @@ input[type=range]::-moz-range-thumb {
   background: #ffc600;
   cursor: pointer;
 }
+
+video::-webkit-media-controls {
+  display: none !important;
+}
