@@ -41,14 +41,23 @@ function scrub(e) {
 
 const enterFullScreen = (vid) => {
     try {
+        console.log('enterFullScreen', vid);
         if (vid.requestFullScreen)
-            vid.requestFullScreen();
+            vid.requestFullScreen().catch( (error) => {
+                console.error(`Error attempting to enable full-screen mode: ${error.messsage} (${error.name})`);
+            });
         else if (vid.mozRequestFullScreen)
-            vid.mozRequestFullScreen();
+            vid.mozRequestFullScreen().catch( (error) => {
+                console.error(`Error attempting to enable full-screen mode: ${error.messsage} (${error.name})`);
+            });
         else if (vid.webkitRequestFullScreen)
-            vid.webkitRequestFullScreen();
+            vid.webkitRequestFullScreen().catch( (error) => {
+                console.error(`Error attempting to enable full-screen mode: ${error.messsage} (${error.name})`);
+            });
         else if (vid.msRequestFullScreen)
-            vid.msRequestFullScreen();
+            vid.msRequestFullScreen().catch( (error) => {
+                console.error(`Error attempting to enable full-screen mode: ${error.messsage} (${error.name})`);
+            });
     } catch (error) {
         console.error(error);
     }
@@ -56,6 +65,7 @@ const enterFullScreen = (vid) => {
 
 const endFullScreen = () => {
     try {
+        console.log('endFullScreen');
         if (document.exitFullscreen)
             document.exitFullscreen();
         else if (document.mozCancelFullScreen)
@@ -71,11 +81,11 @@ const endFullScreen = () => {
 
 const checkFullScreen = () => {
     console.log('checkFullScreen');
-    return document.fullscreenElement || document.webkitFullScreenElement || document.mozFullScreenElement || document.msFullScreenElement || null;
+    return document.fullscreenElement || document.webkitIsFullScreen || document.mozFullScreen || document.msFullScreenEnabled || null;
 }
 
 const isFullScreenEnabled = () => {
-    return document.fullscreenEnabled || document.mozFullScreenEnabled || document.webkitFullScreenEnabled || document.msFullScreenEnabled || null;
+    return document.fullscreenEnabled || document.mozFullScreenEnabled || document.webkitSupportsFullscreen || document.webkitFullscreenEnabled || document.msFullscreenEnabled || null;
 }
 
 // Hook Up Event Listeners
@@ -105,9 +115,9 @@ fullButtons.forEach( (fullButton) => fullButton.addEventListener('click', (e) =>
         let isFullScreen = checkFullScreen();
         console.log({isFullScreen});
 
-        if (isFullScreen === false)
+        if (!isFullScreen)
             enterFullScreen(video);
-        else if (isFullScreen === true)
+        else if (isFullScreen)
             endFullScreen();
 
         console.log({isFullScreen});
