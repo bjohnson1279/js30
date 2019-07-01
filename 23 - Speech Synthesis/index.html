@@ -44,7 +44,6 @@
       .filter( (voice) => voice.lang.includes('en'))
       .map( (voice) => `<option value="${voice.name}">${voice.name} (${voice.lang})</option>`)
       .join('');
-    console.log(voicesDropdown);
   }
 
   function setVoice() {
